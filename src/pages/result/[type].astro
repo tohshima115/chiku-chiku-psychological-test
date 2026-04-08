@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Result } from '../../components/Result';
+import { resultTypes } from '../../data/resultTypes';
+import type { Mode } from '../../data/types';
+
+const { type } = Astro.params;
+const modeParam = Astro.url.searchParams.get('mode');
+const mode: Mode = modeParam === 'chiku' ? 'chikuchiku' : 'pokapoka';
+
+const resultType = resultTypes.find((r) => r.id === type);
+if (!resultType) {
+  return Astro.redirect('/test');
+}
+
+const data = resultType[mode];
+const origin = Astro.url.origin;
+const ogImageUrl = `${origin}/og/${resultType.id}.png?mode=${modeParam ?? 'poka'}`;
+const title = `${data.title} | チクチク心理テスト`;
+---
+
+<Layout title={title} description={data.description} ogImage={ogImageUrl}>
+  <Result client:load resultType={resultType} initialMode={mode} />
+</Layout>

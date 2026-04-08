@@ -1,17 +1,80 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="チクチク心理テスト">
+  <div class="flex min-h-dvh flex-col">
+    <!-- Hero section -->
+    <div class="relative flex flex-1 flex-col items-center justify-center px-6 pt-12 pb-8">
+      <!-- Decorative floating elements -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden">
+        <span class="float absolute top-[12%] left-[8%] text-3xl opacity-60">🌸</span>
+        <span class="float-delay absolute top-[8%] right-[12%] text-2xl opacity-50">🌵</span>
+        <span class="float absolute bottom-[30%] left-[15%] text-xl opacity-30">🌸</span>
+        <span class="float-delay absolute bottom-[35%] right-[10%] text-2xl opacity-40">🌵</span>
+        <span class="float absolute top-[35%] right-[25%] text-lg opacity-20">✨</span>
+      </div>
+
+      <!-- Title area -->
+      <div class="relative z-10 mb-8 text-center">
+        <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/60 px-4 py-1.5 text-xs font-bold text-poka-500 shadow-sm backdrop-blur-sm">
+          <span>🌵</span>
+          <span>身も蓋もない本音の性格診断</span>
+          <span>🌸</span>
+        </div>
+
+        <h1 class="mb-3 text-[2.5rem] font-black leading-tight tracking-tight text-gray-900">
+          チクチク<br />心理テスト
+        </h1>
+
+        <p class="mx-auto max-w-[280px] text-sm leading-relaxed text-gray-500">
+          よくある性格診断って、<br />
+          どの結果も<span class="font-bold text-poka-500">嬉しく</span>ないですか？
+        </p>
+      </div>
+
+      <!-- Concept card -->
+      <div class="relative z-10 mx-auto mb-8 w-full max-w-sm">
+        <div class="glass-card rounded-3xl border border-white/40 p-6 shadow-lg">
+          <div class="mb-4 flex items-start gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-poka-100 text-lg">💭</div>
+            <div class="text-[13px] leading-relaxed text-gray-600">
+              <p>「クリエイティブ型」「マイペースな自由人」「繊細さん」…</p>
+              <p class="mt-1 font-bold text-gray-800">全部、同じことを気持ちよく言い換えてるだけでは？</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gray-100 text-lg">🔍</div>
+            <p class="text-[13px] leading-relaxed text-gray-600">
+              このテストは、そんなオブラートを<span class="font-bold text-gray-800">全部剥がします。</span>
+              <br />
+              <span class="text-poka-500 font-bold">🌸 ぽかぽか</span>と<span class="font-bold text-gray-700">🌵 チクチク</span>を切り替えて、ギャップをお楽しみください。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA section - sticky bottom -->
+    <div class="sticky bottom-0 z-20 bg-gradient-to-t from-poka-bg via-poka-bg to-transparent px-6 pt-4 pb-8">
+      <div class="mx-auto flex max-w-sm flex-col gap-3">
+        <a
+          href="/onboarding"
+          class="group relative flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-4 text-center font-bold text-poka-500 shadow-lg transition-all active:scale-[0.98]"
+        >
+          <span class="text-lg">🌸</span>
+          <span>まずは血液型で体験</span>
+          <span class="absolute right-4 text-xs font-normal text-gray-400">30秒</span>
+        </a>
+        <a
+          href="/test"
+          class="pulse-glow relative flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-6 py-4 text-center font-bold text-white shadow-lg transition-all active:scale-[0.98]"
+        >
+          <span class="text-lg">🌵</span>
+          <span>本編の診断を始める</span>
+          <span class="absolute right-4 text-xs font-normal text-gray-500">12問</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
