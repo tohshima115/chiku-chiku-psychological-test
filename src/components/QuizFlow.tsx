@@ -9,6 +9,8 @@ export function QuizFlow() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scores, setScores] = useState<Scores>(emptyScores());
   const [mode, setMode] = useState<Mode>('pokapoka');
+  const [history, setHistory] = useState<Scores[]>([]);
+  const [direction, setDirection] = useState<1 | -1>(1);
 
   const question = questions[currentIndex];
   const modeData = question[mode];
@@ -18,7 +20,10 @@ export function QuizFlow() {
   function handleChoice(choiceIndex: number) {
     const choice = modeData.choices[choiceIndex];
     const newScores = addScores(scores, choice.scores);
+
+    setHistory([...history, scores]);
     setScores(newScores);
+    setDirection(1);
 
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -29,6 +34,14 @@ export function QuizFlow() {
     }
   }
 
+  function handleBack() {
+    if (history.length === 0) return;
+    setScores(history[history.length - 1]);
+    setHistory(history.slice(0, -1));
+    setDirection(-1);
+    setCurrentIndex(currentIndex - 1);
+  }
+
   return (
     <div
       className="flex min-h-dvh flex-col transition-colors duration-500"
@@ -36,14 +49,22 @@ export function QuizFlow() {
     >
       {/* Top bar */}
       <div className="sticky top-0 z-30 px-4 pt-4 pb-2" style={{ background: isChiku ? '#0d0d1a' : '#fff5f0' }}>
-        {/* Back link */}
         <div className="mb-3 flex items-center justify-between">
-          <a
-            href="/"
-            className={`text-xs font-bold transition-colors ${isChiku ? 'text-gray-500' : 'text-gray-400'}`}
-          >
-            ✕ やめる
-          </a>
+          {currentIndex > 0 ? (
+            <button
+              onClick={handleBack}
+              className={`cursor-pointer text-xs font-bold transition-colors ${isChiku ? 'text-gray-500' : 'text-gray-400'}`}
+            >
+              ← 前の質問
+            </button>
+          ) : (
+            <a
+              href="/"
+              className={`text-xs font-bold transition-colors ${isChiku ? 'text-gray-500' : 'text-gray-400'}`}
+            >
+              ✕ やめる
+            </a>
+          )}
           <ModeToggle mode={mode} onToggle={() => setMode(mode === 'pokapoka' ? 'chikuchiku' : 'pokapoka')} />
         </div>
 
@@ -67,18 +88,19 @@ export function QuizFlow() {
 
       {/* Question area */}
       <div className="flex flex-1 flex-col px-5 pt-6 pb-8">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
-            key={`${currentIndex}-${mode}`}
-            initial={{ opacity: 0, y: 24 }}
+            key={currentIndex}
+            custom={direction}
+            initial={{ opacity: 0, y: direction * 24 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -24 }}
+            exit={{ opacity: 0, y: direction * -24 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className="flex flex-1 flex-col"
           >
             {/* Question number badge */}
             <div
-              className={`mb-4 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
+              className={`mb-4 inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold transition-colors duration-300 ${
                 isChiku ? 'bg-chiku-400/10 text-chiku-400' : 'bg-poka-400/15 text-poka-500'
               }`}
             >
@@ -88,7 +110,7 @@ export function QuizFlow() {
 
             {/* Question text */}
             <h2
-              className={`mb-8 text-xl font-black leading-relaxed ${
+              className={`mb-8 text-xl font-black leading-relaxed transition-colors duration-300 ${
                 isChiku ? 'text-white' : 'text-gray-800'
               }`}
             >
@@ -102,11 +124,8 @@ export function QuizFlow() {
                   key={i}
                   onClick={() => handleChoice(i)}
                   whileTap={{ scale: 0.97 }}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.3 }}
                   className={`
-                    w-full rounded-2xl px-5 py-4 text-left text-[15px] font-bold
+                    flex w-full items-center gap-3 rounded-2xl px-5 py-4 text-left text-[15px] font-bold
                     transition-all duration-200 cursor-pointer active:brightness-95
                     ${isChiku
                       ? 'bg-white/5 text-gray-200 ring-1 ring-white/10 active:bg-chiku-400/10 active:ring-chiku-400/30'
@@ -114,12 +133,12 @@ export function QuizFlow() {
                     }
                   `}
                 >
-                  <span className={`mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${
+                  <span className={`shrink-0 inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-black transition-colors duration-300 ${
                     isChiku ? 'bg-white/10 text-chiku-400' : 'bg-poka-100 text-poka-500'
                   }`}>
                     {String.fromCharCode(65 + i)}
                   </span>
-                  {choice.label}
+                  <span>{choice.label}</span>
                 </motion.button>
               ))}
             </div>
